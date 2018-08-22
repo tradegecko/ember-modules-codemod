@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "chalk": "^1.1.3",
-    "ember-rfc176-data": "^0.3.2",
+    "ember-rfc176-data": "git://github.com/tradegecko/ember-rfc176-data#master",
     "execa": "~0.8.0",
     "glob": "^7.1.1",
     "jscodeshift": "^0.3.29"
