@@ -1354,7 +1354,7 @@ ecc-jsbn@~0.1.1:
 
 "ember-rfc176-data@git://github.com/tradegecko/ember-rfc176-data#master":
   version "0.3.5"
-  resolved "git://github.com/tradegecko/ember-rfc176-data#0b6c0fcefa71911827900dd8e92860e54e93ca21"
+  resolved "git://github.com/tradegecko/ember-rfc176-data#61691acc0539818dda62f74ea6cf8c04c6856aa4"
 
 errno@^0.1.4:
   version "0.1.4"
