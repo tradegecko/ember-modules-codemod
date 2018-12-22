@@ -3,7 +3,6 @@
 const fs       = require("fs");
 const RESERVED = require("ember-rfc176-data/reserved");
 const MAPPINGS = require("ember-rfc176-data");
-
 const LOG_FILE = "ember-modules-codemod.tmp." + process.pid;
 const ERROR_WARNING = 1;
 const MISSING_GLOBAL_WARNING = 2;
@@ -21,8 +20,15 @@ module.exports = transform;
  * It scans JavaScript files that use the Ember global and updates
  * them to use the module syntax from the proposed new RFC.
  */
-function transform(file, api/*, options*/) {
+function transform(file, api, options) {
   let source = file.source;
+  let customMappings;
+
+  if (options.extra) {
+    customMappings = JSON.parse(fs.readFileSync(options.extra, 'utf8'));
+  } else  {
+    customMappings = [];
+  }
 
   const lineTerminator = source.indexOf('\r\n') > -1 ? '\r\n' : '\n';
 
@@ -46,7 +52,7 @@ function transform(file, api/*, options*/) {
 
     // Build a data structure that tells us how to map properties on the Ember
     // global into the module syntax.
-    let mappings = buildMappings(modules);
+    let mappings = buildMappings(modules, customMappings);
 
     let globalEmber = getGlobalEmberName(root);
 
@@ -132,10 +138,11 @@ function transform(file, api/*, options*/) {
    * into a Mapping instance. The Mapping class lazily reifies its associated
    * module as they it is consumed.
    */
-  function buildMappings(registry) {
+  function buildMappings(registry, customMappings = []) {
     let mappings = {};
+    let jsonMappings = MAPPINGS.concat(customMappings);
 
-    for (let mapping of MAPPINGS) {
+    for (let mapping of jsonMappings) {
       if (!mapping.deprecated) {
         mappings[mapping.global.substr('Ember.'.length)] = new Mapping(mapping, registry);
       }
